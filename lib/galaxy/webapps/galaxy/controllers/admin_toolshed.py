@@ -160,7 +160,8 @@ class AdminToolshed( AdminGalaxy ):
             if operation == "install latest revision":
                 return trans.response.send_redirect( web.url_for( controller='admin_toolshed',
                                                                   action='install_latest_repository_revision',
-                                                                  **kwd ) )
+                                                                  **kwd ) 
+            
             if operation == 'install':
                 # The user is attempting to install a white ghost.
                 kwd[ 'status' ] = 'error'
@@ -274,11 +275,13 @@ class AdminToolshed( AdminGalaxy ):
                     shutil.rmtree( repository_install_dir )
                     log.debug( "Removed repository installation directory: %s" % str( repository_install_dir ) )
                     removed = True
-                except Exception, e:
+                except Exception as e:
+                    print(e)                                    
                     log.debug( "Error removing repository installation directory %s: %s" % ( str( repository_install_dir ), str( e ) ) )
                     if isinstance( e, OSError ) and not os.path.exists( repository_install_dir ):
                         removed = True
                         log.debug( "Repository directory does not exist on disk, marking as uninstalled." )
+                   
                     else:
                         removed = False
                 if removed:
@@ -348,7 +351,8 @@ class AdminToolshed( AdminGalaxy ):
                     file_name = os.path.basename( relative_path_to_image_file )
                     try:
                         extension = file_name.split( '.' )[ -1 ]
-                    except Exception, e:
+                    except Exception as e:
+                        print(e)                            
                         extension = None
                     if extension:
                         mimetype = trans.app.datatypes_registry.get_mimetype_by_extension( extension )
@@ -1027,7 +1031,8 @@ class AdminToolshed( AdminGalaxy ):
                     url = common_util.url_join( tool_shed_url,
                                                 'repository/get_repository_id%s' % params )
                     repository_ids = common_util.tool_shed_get( trans.app, tool_shed_url, url )
-                except Exception, e:
+                except Exception as e:
+                    print(e)                                
                     # The Tool Shed cannot handle the get_repository_id request, so the code must be older than the
                     # 04/2014 Galaxy release when it was introduced.  It will be safest to error out and let the
                     # Tool Shed admin update the Tool Shed to a later release.
